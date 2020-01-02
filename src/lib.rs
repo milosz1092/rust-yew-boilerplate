@@ -1,6 +1,6 @@
 #![recursion_limit = "512"]
 
-mod model;
+mod app;
 mod utils;
 
 use wasm_bindgen::prelude::*;
@@ -16,6 +16,6 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 pub fn run_app() -> Result<(), JsValue> {
     utils::set_panic_hook();
     web_logger::init();
-    yew::start_app::<model::Model>();
+    yew::start_app::<app::App>();
     Ok(())
 }

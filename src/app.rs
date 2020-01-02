@@ -1,7 +1,7 @@
 use log::*;
 use yew::{html, Component, ComponentLink, Html, Renderable, ShouldRender};
 
-pub struct Model {
+pub struct App {
     link: ComponentLink<Self>,
 }
 
@@ -10,12 +10,12 @@ pub enum Msg {
     Test,
 }
 
-impl Component for Model {
+impl Component for App {
     type Message = Msg;
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Model { link }
+        App { link }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -32,7 +32,7 @@ impl Component for Model {
     }
 }
 
-impl Renderable<Model> for Model {
+impl Renderable<App> for App {
     fn view(&self) -> Html<Self> {
         info!("rendered!");
         html! {
