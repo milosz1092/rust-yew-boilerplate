@@ -7,6 +7,7 @@ pub struct Model {
 
 pub enum Msg {
     Click,
+    Test,
 }
 
 impl Component for Model {
@@ -19,7 +20,13 @@ impl Component for Model {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::Click => {}
+            Msg::Test => {
+                info!("Test triggered.")
+            }
+            Msg::Click => {
+                info!("Click triggered.");
+                self.link.send_self(Msg::Test);
+            }
         }
         true
     }
