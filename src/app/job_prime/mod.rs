@@ -6,6 +6,8 @@ use yew::worker::*;
 // use yew::services::interval::IntervalService;
 // use yew::services::Task;
 
+pub mod utils;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Request {
     GetPrimeCount(i32, i32),
@@ -13,7 +15,7 @@ pub enum Request {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Response {
-    DataFetched,
+    DataFetched(i32),
 }
 
 pub enum Msg {
@@ -58,8 +60,8 @@ impl Agent for Worker {
         info!("Request: {:?}", msg);
         match msg {
             Request::GetPrimeCount(first, last) => {
-                
-                self.link.response(who, Response::DataFetched);
+                let result = utils::count_prime_numbers_in_range(first, last);
+                self.link.response(who, Response::DataFetched(result));
             }
         }
     }
