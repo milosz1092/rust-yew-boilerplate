@@ -6,6 +6,11 @@ edition = "2018"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+#cargo web build --bin native_worker --release
+[[bin]]
+name = "worker_prime"
+path = "src/app/worker_prime_agent.rs"
+
 [features]
 default = ["console_error_panic_hook"]
 

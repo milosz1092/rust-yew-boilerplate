@@ -3,7 +3,7 @@ use yew::worker::*;
 use yew::{html, Component, ComponentLink, Html, ShouldRender};
 use serde_derive::{Deserialize, Serialize};
 
-pub mod job_prime;
+pub mod worker_prime;
 
 #[derive(Serialize, Deserialize)]
 pub struct State {
@@ -13,14 +13,14 @@ pub struct State {
 
 pub struct App {
     link: ComponentLink<Self>,
-    job_prime: Box<dyn Bridge<job_prime::Worker>>,
+    worker_prime: Box<dyn Bridge<worker_prime::Worker>>,
     state: State,
 }
 
 pub enum Msg {
     UpdatePrimeRange(String, String),
+    DataReceived(worker_prime::Response),
     ComputePrime,
-    DataReceived,
 }
 
 impl Component for App {
@@ -28,15 +28,15 @@ impl Component for App {
     type Properties = ();
 
     fn create(_: Self::Properties, mut link: ComponentLink<Self>) -> Self {
-        let callback = link.send_back(|_| Msg::DataReceived);
-        let job_prime = job_prime::Worker::bridge(callback);
+        let callback = link.send_back(Msg::DataReceived);
+        let worker_prime = worker_prime::Worker::bridge(callback);
 
         let state = State {
             prime_range_first: "".into(),
             prime_range_last: "".into()
         };
 
-        App { job_prime, link, state }
+        App { worker_prime, link, state }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -51,13 +51,16 @@ impl Component for App {
             Msg::ComputePrime => {
                 info!("Click triggered.");
                 
-                self.job_prime.send(job_prime::Request::GetPrimeCount(
+                self.worker_prime.send(worker_prime::Request::GetPrimeCount(
                     self.state.prime_range_first.parse::<i32>().unwrap(),
                     self.state.prime_range_last.parse::<i32>().unwrap()
                 ));
             }
-            Msg::DataReceived => {
-                info!("Data received.");
+            Msg::DataReceived(worker_prime_response) => {
+                match worker_prime_response {
+                    worker_prime::Response::PrimeCount(value) => info!("Data from agent: {}", value),
+                }
+                
             }
         }
         true

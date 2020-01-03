@@ -15,7 +15,7 @@ pub enum Request {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Response {
-    DataFetched(i32),
+    PrimeCount(i32),
 }
 
 pub enum Msg {
@@ -30,7 +30,7 @@ pub struct Worker {
 }
 
 impl Agent for Worker {
-    type Reach = Job;
+    type Reach = Public;
     type Message = Msg;
     type Input = Request;
     type Output = Response;
@@ -61,8 +61,12 @@ impl Agent for Worker {
         match msg {
             Request::GetPrimeCount(first, last) => {
                 let result = utils::count_prime_numbers_in_range(first, last);
-                self.link.response(who, Response::DataFetched(result));
+                self.link.response(who, Response::PrimeCount(result));
             }
         }
+    }
+
+    fn name_of_resource() -> &'static str {
+        "worker_prime.js"
     }
 }
