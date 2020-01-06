@@ -6,7 +6,7 @@ edition = "2018"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-#cargo web build --bin native_worker --release
+#cargo web build --bin worker_prime --release
 [[bin]]
 name = "worker_prime"
 path = "src/app/worker_prime_agent.rs"
@@ -23,6 +23,7 @@ serde_derive = "1"
 wasm-bindgen = "^0.2.54"
 web_logger = "0.2"
 yew = "0.10"
+web-sys = { version = "0.3.33", features = ["Window"] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
